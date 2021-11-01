@@ -9,5 +9,5 @@ import java.util.*
 interface ResellerRepository: JpaRepository<ResellerEntity, Long> {
 
     fun findByResellerEmailOrResellerDocument(email: String, document: String): Optional<ResellerEntity>
-
+    fun findByResellerEmailAndResellerPassword(resellerEmail: String, resellerPassword: String): Optional<ResellerEntity>
 }

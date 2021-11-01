@@ -10,9 +10,14 @@ class APIConstant {
         const val SERVICE_UPDATE_RESELLER = "/reseller/{id}"
         const val SERVICE_DELETE_RESELLER = "/reseller/{id}"
 
+        const val SERVICE_POST_AUTH = "/auth"
+
         const val ERROR_400 = "Revendedor já existe no sistema."
         const val DETAILS_ERROR_400 = "O revendedor já existe no sistema, " +
                 "verifique o email e o número do documento."
+
+        const val ERROR_AUTH_400 = "Erro de login"
+        const val DETAILS_ERROR_AUTH_400 = "Email ou senha estao incorretos."
 
         const val ERROR_404 = "Revendedor não existe no sistema."
         const val DETAILS_ERROR_404 = "O revendedor não existe no sistema, " +

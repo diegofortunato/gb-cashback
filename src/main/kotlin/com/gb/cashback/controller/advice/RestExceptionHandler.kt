@@ -3,6 +3,7 @@ package com.gb.cashback.controller.advice
 import com.gb.cashback.constant.APIConstant
 import com.gb.cashback.controller.response.ErrorResponse
 import com.gb.cashback.controller.response.Response
+import com.gb.cashback.exception.AuthException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,6 +30,21 @@ class RestExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 APIConstant.ERROR_400,
                 APIConstant.DETAILS_ERROR_400
+        )
+        val response = Response(data = errorResponse)
+        return ResponseEntity(response, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(value = [(AuthException::class)])
+    fun handleAuthException(ex: AuthException, request: WebRequest):
+            ResponseEntity<Response<ErrorResponse>> {
+        log.error("Error in handleAuthException: {}", ex.message)
+
+        val errorResponse = ErrorResponse(
+                Instant.now().toString(),
+                HttpStatus.BAD_REQUEST.value(),
+                APIConstant.ERROR_AUTH_400,
+                APIConstant.DETAILS_ERROR_AUTH_400
         )
         val response = Response(data = errorResponse)
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
