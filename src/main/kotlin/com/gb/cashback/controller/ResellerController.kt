@@ -26,7 +26,7 @@ class ResellerController(private val resellerService: ResellerService) {
         val reseller = resellerService.createReseller(resellerRequest.request.toEntity())
         return ResponseEntity
                 .created(URI.create(
-                        URLEncoder.encode(APIConstant.BASE_API + APIConstant.SERVICE_CREATE_RESELLER, "UTF-8")))
+                        URLEncoder.encode(APIConstant.BASE_API + APIConstant.SERVICE_GET_RESELLER, "UTF-8")))
                 .body(Response(data = reseller))
     }
 

@@ -12,6 +12,9 @@ class APIConstant {
 
         const val SERVICE_POST_AUTH = "/auth"
 
+        const val SERVICE_POST_PURCHASE = "/purchase"
+        const val SERVICE_GET_PURCHASE = "/purchase"
+
         const val ERROR_400 = "Revendedor já existe no sistema."
         const val DETAILS_ERROR_400 = "O revendedor já existe no sistema, " +
                 "verifique o email e o número do documento."
