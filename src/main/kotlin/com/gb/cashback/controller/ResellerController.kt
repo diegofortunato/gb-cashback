@@ -3,10 +3,13 @@ package com.gb.cashback.controller
 import com.gb.cashback.constant.APIConstant
 import com.gb.cashback.controller.request.Request
 import com.gb.cashback.controller.response.Response
+import com.gb.cashback.controller.response.ResponsePagination
 import com.gb.cashback.dto.ResellerDTO
 import com.gb.cashback.service.ResellerService
 import com.gb.cashback.util.extension.DTOTOEntityExtension.toEntity
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
@@ -36,6 +39,26 @@ class ResellerController(private val resellerService: ResellerService) {
 
         val reseller = resellerService.findReseller(resellerID)
         return ResponseEntity.ok(Response(data = reseller))
+    }
+
+    @GetMapping(APIConstant.SERVICE_GET_ALL_RESELLER)
+    fun findAllReseller(
+        @RequestParam(name = "page", defaultValue = "0") page: Int,
+        @RequestParam(name = "size", defaultValue = "10") size: Int
+    ): ResponseEntity<ResponsePagination<List<ResellerDTO>>> {
+        log.info("GET ALL ${APIConstant.SERVICE_GET_ALL_RESELLER}")
+
+        val paging = PageRequest.of(page, size)
+
+        val response = resellerService.findAllReseller(paging)
+        return ResponseEntity.ok(
+                ResponsePagination(
+                    data = response.content,
+                    totalPages = response.totalPages,
+                    currentPage = response.number,
+                    totalItems = response.totalElements
+            )
+        )
     }
 
     @PatchMapping(APIConstant.SERVICE_UPDATE_RESELLER)

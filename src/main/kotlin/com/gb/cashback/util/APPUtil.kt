@@ -2,6 +2,7 @@ package com.gb.cashback.util
 
 import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.LoggerFactory
+import java.text.Normalizer
 
 object APPUtil {
 
@@ -11,7 +12,14 @@ object APPUtil {
     fun normalizeFields(fieldName: String): String {
         log.info("Normalize field={}", fieldName)
 
-        return fieldName.toLowerCase()
+        return fieldName.lowercase()
+    }
+
+    @JvmStatic
+    fun removeSpecialCaracters(field: String): String {
+        log.info("Remove special caracters for document")
+
+        return field.replace("""[.-]""".toRegex(), "")
     }
 
     @JvmStatic

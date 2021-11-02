@@ -7,6 +7,7 @@ class APIConstant {
 
         const val SERVICE_CREATE_RESELLER = "/reseller"
         const val SERVICE_GET_RESELLER = "/reseller/{id}"
+        const val SERVICE_GET_ALL_RESELLER = "/reseller"
         const val SERVICE_UPDATE_RESELLER = "/reseller/{id}"
         const val SERVICE_DELETE_RESELLER = "/reseller/{id}"
 
@@ -20,21 +21,21 @@ class APIConstant {
         const val BASE_INTEGRATION = "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/"
         const val SERVICE_GET_CASHBACK_INTEGRATION = "cashback?cpf=12312312321"
 
-        const val ERROR_400 = "Revendedor já existe no sistema."
-        const val DETAILS_ERROR_400 = "O revendedor já existe no sistema, " +
-                "verifique o email e o número do documento."
+        const val ERROR_400 = "Reseller already exists in the system."
+        const val DETAILS_ERROR_400 = "Reseller already exists in the system, " +
+                "check the email and document number."
 
-        const val ERROR_AUTH_400 = "Erro de login"
-        const val DETAILS_ERROR_AUTH_400 = "Email ou senha estao incorretos."
+        const val ERROR_AUTH_400 = "Email or password is incorrect."
+        const val DETAILS_ERROR_AUTH_400 = "There was an error when logging in, check your email and password."
 
-        const val ERROR_404 = "Revendedor não existe no sistema."
-        const val DETAILS_ERROR_404 = "O revendedor não existe no sistema, " +
-                "verifique o seu ID."
+        const val ERROR_404 = "Reseller does not exist in the system."
+        const val DETAILS_ERROR_404 = "Reseller does not exist in the system, " +
+                "check your ID."
 
-        const val ERROR_412 = "Existem campos com Inconsistências."
+        const val ERROR_412 = "There are fields with Inconsistencies."
 
-        const val ERROR_500 = "Erro interno do servidor."
-        const val DETAILS_ERROR_500 = "Ocoreu um erro interno no servidor, " +
-                "entre em contato com o administrador do sistema."
+        const val ERROR_500 = "Internal server error."
+        const val DETAILS_ERROR_500 = "An internal server error occurred, " +
+                "contact your system administrator."
     }
 }

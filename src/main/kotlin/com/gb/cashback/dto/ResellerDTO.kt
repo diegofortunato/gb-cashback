@@ -1,25 +1,31 @@
 package com.gb.cashback.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 data class ResellerDTO(
         @JsonProperty("id")
         val resellerId: Long,
 
-        @JsonProperty("nome")
-        @NotEmpty(message = "Nome completo não pode ser nulo")
+        @JsonProperty("name")
+        @field:NotNull @field:NotEmpty(message = "Full name cannot be empty")
         val resellerFullName: String,
 
-        @JsonProperty("documento")
-        @NotEmpty(message = "CPF não pode ser nulo")
+        @JsonProperty("document")
+        @field:Size(min = 14, message = "Document should have at least 14 characters. EX: xxx.xxx.xxx-xx")
+        @field:NotNull @field:NotEmpty(message = "Document cannot be empty")
         val resellerDocument: String,
 
         @JsonProperty("email")
-        @NotEmpty(message = "Email não pode ser nulo")
+        @field:NotNull @field:NotEmpty(message = "Email cannot be empty")
+        @field:Email(message = "Email should be valid")
         val resellerEmail: String,
 
-        @JsonProperty("senha")
-        @NotEmpty(message = "Senha não pode ser nula")
+        @JsonProperty("password", access = JsonProperty.Access.WRITE_ONLY)
+        @field:Size(min = 8, message = "Password should have at least 8 characters")
+        @field:NotNull @field:NotEmpty(message = "Password cannot be empty")
         val resellerPassword: String,
 )

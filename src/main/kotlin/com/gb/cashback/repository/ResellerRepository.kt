@@ -8,6 +8,8 @@ import java.util.*
 @Repository
 interface ResellerRepository: JpaRepository<ResellerEntity, Long> {
 
-    fun findByResellerEmailOrResellerDocument(email: String, document: String): Optional<ResellerEntity>
+    fun findByResellerEmailOrResellerDocument(resellerEmail: String, resellerDocument: String): Optional<ResellerEntity>
     fun findByResellerEmailAndResellerPassword(resellerEmail: String, resellerPassword: String): Optional<ResellerEntity>
+    fun findByResellerEmail(email: String): Optional<ResellerEntity>
+    fun findByResellerDocument(document: String): Optional<ResellerEntity>
 }

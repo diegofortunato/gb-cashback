@@ -8,19 +8,19 @@ data class PurchaseDTO(
         @JsonProperty("id")
         val purchaseId: Long,
 
-        @JsonProperty("codigo")
-        @NotEmpty(message = "Código do produto não pode ser nulo")
+        @JsonProperty("code")
+        @NotEmpty(message = "Code cannot be null")
         val purchaseCode: String,
 
-        @JsonProperty("valor")
-        @NotEmpty(message = "Valor não pode ser nulo")
+        @JsonProperty("value")
+        @NotEmpty(message = "Value cannot be null")
         val purchaseValue: Double,
 
-        @JsonProperty("data")
-        @NotEmpty(message = "Data não pode ser nulo")
+        @JsonProperty("date")
+        @NotEmpty(message = "Date cannot be null")
         val purchaseDate: String,
 
-        @JsonProperty("documento")
-        @NotEmpty(message = "Documento não pode ser nulo")
+        @JsonProperty("document")
+        @NotEmpty(message = "Document cannot be null")
         val resellerDocument: String,
 )

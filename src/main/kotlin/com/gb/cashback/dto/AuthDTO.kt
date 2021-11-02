@@ -5,10 +5,10 @@ import javax.validation.constraints.NotEmpty
 
 data class AuthDTO(
         @JsonProperty("email")
-        @NotEmpty(message = "Email não pode ser nulo")
+        @NotEmpty(message = "Email cannot be null")
         val resellerEmail: String,
 
         @JsonProperty("senha")
-        @NotEmpty(message = "Senha não pode ser nula")
+        @NotEmpty(message = "Password cannot be null")
         val resellerPassword: String,
 )

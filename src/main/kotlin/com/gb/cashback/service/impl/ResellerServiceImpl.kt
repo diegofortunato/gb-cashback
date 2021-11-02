@@ -7,6 +7,8 @@ import com.gb.cashback.service.ResellerService
 import com.gb.cashback.util.APPUtil
 import com.gb.cashback.util.extension.EntityToDTOExtension.toDTO
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.persistence.EntityExistsException
@@ -23,7 +25,7 @@ class ResellerServiceImpl(
         log.info("Create Reseller service. userName={}", resellerEntity.resellerFullName)
 
         resellerEntity.resellerEmail = APPUtil.normalizeFields(resellerEntity.resellerEmail)
-        resellerEntity.resellerDocument = APPUtil.normalizeFields(resellerEntity.resellerDocument)
+        resellerEntity.resellerDocument = APPUtil.removeSpecialCaracters(resellerEntity.resellerDocument)
 
         val reseller = isExistReseller(resellerEntity.resellerEmail, resellerEntity.resellerDocument)
         if (reseller.isPresent) throw EntityExistsException("Reseller exists")
@@ -43,15 +45,25 @@ class ResellerServiceImpl(
         return resellerDB.toDTO()
     }
 
+    override fun findAllReseller(paging: PageRequest): Page<ResellerDTO> {
+        log.info("Find All Reseller service.")
+
+        return resellerRepository.findAll(paging).map { reseller -> reseller.toDTO() }
+    }
+
     override fun updateReseller(resellerID: Long, resellerEntity: ResellerEntity): ResellerDTO {
         log.info("Update Reseller service. resellerName={}", resellerEntity.resellerFullName)
 
         val resellerDB = resellerRepository.findById(resellerID)
                 .orElseThrow { EntityNotFoundException("Reseller not Exists") }
 
-        val reseller = isExistReseller(resellerDB.resellerEmail, resellerDB.resellerDocument)
+        val document = APPUtil.removeSpecialCaracters(resellerEntity.resellerDocument)
 
-        if (reseller.isPresent && reseller.get().resellerId == resellerDB.resellerId) {
+        val resellerDocument = isExistResellerDocument(document)
+        val resellerEmail = isExistResellerEmail(resellerEntity.resellerEmail)
+
+        if (resellerDocument.isPresent && resellerDocument.get().resellerId == resellerDB.resellerId &&
+                resellerEmail.isPresent && resellerEmail.get().resellerId == resellerDB.resellerId) {
             updateFieldsReseller(resellerDB, resellerEntity)
         } else {
             throw EntityExistsException("Email or document already exists in the system")
@@ -69,13 +81,21 @@ class ResellerServiceImpl(
         resellerRepository.delete(resellerDB)
     }
 
-    private fun isExistReseller(email: String, document: String): Optional<ResellerEntity> {
-        return resellerRepository.findByResellerEmailOrResellerDocument(email, document)
+    private fun isExistReseller(resellerEmail: String, resellerDocument: String): Optional<ResellerEntity> {
+        return resellerRepository.findByResellerEmailOrResellerDocument(resellerEmail, resellerDocument)
+    }
+
+    private fun isExistResellerEmail(email: String): Optional<ResellerEntity> {
+        return resellerRepository.findByResellerEmail(email)
+    }
+
+    private fun isExistResellerDocument(document: String): Optional<ResellerEntity> {
+        return resellerRepository.findByResellerDocument(document)
     }
 
     private fun updateFieldsReseller(resellerDB: ResellerEntity, resellerEntity: ResellerEntity) {
         resellerDB.resellerFullName = resellerEntity.resellerFullName
-        resellerDB.resellerDocument = APPUtil.normalizeFields(resellerEntity.resellerDocument)
+        resellerDB.resellerDocument = APPUtil.removeSpecialCaracters(resellerEntity.resellerDocument)
         resellerDB.resellerEmail = APPUtil.normalizeFields(resellerEntity.resellerEmail)
         resellerDB.resellerPassword = APPUtil.encryptPassword(resellerEntity.resellerPassword)!!
     }
