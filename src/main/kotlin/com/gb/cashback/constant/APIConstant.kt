@@ -15,6 +15,11 @@ class APIConstant {
         const val SERVICE_POST_PURCHASE = "/purchase"
         const val SERVICE_GET_PURCHASE = "/purchase"
 
+        const val SERVICE_GET_CASHBACK = "/cashback"
+
+        const val BASE_INTEGRATION = "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/"
+        const val SERVICE_GET_CASHBACK_INTEGRATION = "cashback?cpf=12312312321"
+
         const val ERROR_400 = "Revendedor já existe no sistema."
         const val DETAILS_ERROR_400 = "O revendedor já existe no sistema, " +
                 "verifique o email e o número do documento."
