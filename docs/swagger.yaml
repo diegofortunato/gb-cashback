@@ -1,0 +1,700 @@
+swagger: '2.0'
+info:
+  description: Documentation of the GB Cashback project.
+  version: 1.0.0
+  title: GB Cashback Documentation
+  license:
+    name: Apache License Version 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+host: localhost:8080
+basePath: /
+tags:
+  - name: auth-controller
+    description: Auth Controller
+  - name: cashback-controller
+    description: Cashback Controller
+  - name: purchase-controller
+    description: Purchase Controller
+  - name: reseller-controller
+    description: Reseller Controller
+paths:
+  /actuator:
+    get:
+      tags:
+        - web-mvc-links-handler
+      summary: links
+      operationId: linksUsingGET
+      produces:
+        - application/vnd.spring-boot.actuator.v3+json
+        - application/json
+        - application/vnd.spring-boot.actuator.v2+json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            additionalProperties:
+              type: object
+              additionalProperties:
+                $ref: '#/definitions/Link'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /actuator/health:
+    get:
+      tags:
+        - operation-handler
+      summary: handle
+      operationId: handleUsingGET_1
+      produces:
+        - application/vnd.spring-boot.actuator.v3+json
+        - application/json
+        - application/vnd.spring-boot.actuator.v2+json
+      parameters:
+        - in: body
+          name: body
+          description: body
+          required: false
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /actuator/health/**:
+    get:
+      tags:
+        - operation-handler
+      summary: handle
+      operationId: handleUsingGET
+      produces:
+        - application/vnd.spring-boot.actuator.v3+json
+        - application/json
+        - application/vnd.spring-boot.actuator.v2+json
+      parameters:
+        - in: body
+          name: body
+          description: body
+          required: false
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/auth:
+    post:
+      tags:
+        - auth-controller
+      summary: authReseller
+      operationId: authResellerUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: authRequest
+          description: authRequest
+          required: true
+          schema:
+            $ref: '#/definitions/Request«AuthDTO»'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«AuthDTO»'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/cashback/{cpf}:
+    get:
+      tags:
+        - cashback-controller
+      summary: findCashback
+      operationId: findCashbackUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: cpf
+          in: path
+          description: cpf
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«CashbackDTO»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/purchase:
+    get:
+      tags:
+        - purchase-controller
+      summary: findAllPurchase
+      operationId: findAllPurchaseUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 0
+          format: int32
+        - name: size
+          in: query
+          description: size
+          required: false
+          type: integer
+          default: 10
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponsePagination«List«PurchaseDTO»»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    post:
+      tags:
+        - purchase-controller
+      summary: createPurchase
+      operationId: createPurchaseUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: purchaseRequest
+          description: purchaseRequest
+          required: true
+          schema:
+            $ref: '#/definitions/Request«PurchaseDTO»'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«PurchaseDTO»'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/purchase/{id}:
+    get:
+      tags:
+        - purchase-controller
+      summary: findPurchaseByReseller
+      operationId: findPurchaseByResellerUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 0
+          format: int32
+        - name: size
+          in: query
+          description: size
+          required: false
+          type: integer
+          default: 10
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponsePagination«List«PurchaseDTO»»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/reseller:
+    get:
+      tags:
+        - reseller-controller
+      summary: findAllReseller
+      operationId: findAllResellerUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 0
+          format: int32
+        - name: size
+          in: query
+          description: size
+          required: false
+          type: integer
+          default: 10
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponsePagination«List«ResellerDTO»»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    post:
+      tags:
+        - reseller-controller
+      summary: createReseller
+      operationId: createResellerUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: resellerRequest
+          description: resellerRequest
+          required: true
+          schema:
+            $ref: '#/definitions/Request«ResellerDTO»'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«ResellerDTO»'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /v1/reseller/{id}:
+    get:
+      tags:
+        - reseller-controller
+      summary: findReseller
+      operationId: findResellerUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«ResellerDTO»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    delete:
+      tags:
+        - reseller-controller
+      summary: deleteReseller
+      operationId: deleteResellerUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«ResellerDTO»'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      deprecated: false
+    patch:
+      tags:
+        - reseller-controller
+      summary: updateReseller
+      operationId: updateResellerUsingPATCH
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          name: resellerRequest
+          description: resellerRequest
+          required: true
+          schema:
+            $ref: '#/definitions/Request«ResellerDTO»'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Response«ResellerDTO»'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      deprecated: false
+definitions:
+  AuthDTO:
+    type: object
+    required:
+      - email
+      - senha
+    properties:
+      email:
+        type: string
+      senha:
+        type: string
+    title: AuthDTO
+  CashbackDTO:
+    type: object
+    required:
+      - credit
+    properties:
+      credit:
+        type: integer
+        format: int64
+    title: CashbackDTO
+  Link:
+    type: object
+    properties:
+      href:
+        type: string
+      templated:
+        type: boolean
+    title: Link
+  Map«string,Link»:
+    type: object
+    title: Map«string,Link»
+    additionalProperties:
+      $ref: '#/definitions/Link'
+  ModelAndView:
+    type: object
+    properties:
+      empty:
+        type: boolean
+      model:
+        type: object
+      modelMap:
+        type: object
+        additionalProperties:
+          type: object
+      reference:
+        type: boolean
+      status:
+        type: string
+        enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 425 TOO_EARLY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+      view:
+        $ref: '#/definitions/View'
+      viewName:
+        type: string
+    title: ModelAndView
+  PurchaseDTO:
+    type: object
+    required:
+      - code
+      - date
+      - document
+      - value
+    properties:
+      id:
+        type: integer
+        format: int64
+      code:
+        type: string
+      value:
+        type: number
+      date:
+        type: string
+      status:
+        type: string
+      value_cashback:
+        type: number
+      percentage_cashback:
+        type: integer
+        format: int32
+      document:
+        type: string
+    title: PurchaseDTO
+  Request«AuthDTO»:
+    type: object
+    required:
+      - request
+    properties:
+      request:
+        $ref: '#/definitions/AuthDTO'
+    title: Request«AuthDTO»
+  Request«PurchaseDTO»:
+    type: object
+    required:
+      - request
+    properties:
+      request:
+        $ref: '#/definitions/PurchaseDTO'
+    title: Request«PurchaseDTO»
+  Request«ResellerDTO»:
+    type: object
+    required:
+      - request
+    properties:
+      request:
+        $ref: '#/definitions/ResellerDTO'
+    title: Request«ResellerDTO»
+  ResellerDTO:
+    type: object
+    required:
+      - document
+      - email
+      - id
+      - name
+      - password
+    properties:
+      document:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      password:
+        type: string
+    title: ResellerDTO
+  ResponsePagination«List«PurchaseDTO»»:
+    type: object
+    required:
+      - currentPage
+      - data
+      - totalItems
+      - totalPages
+    properties:
+      currentPage:
+        type: integer
+        format: int32
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PurchaseDTO'
+      totalItems:
+        type: integer
+        format: int64
+      totalPages:
+        type: integer
+        format: int32
+    title: ResponsePagination«List«PurchaseDTO»»
+  ResponsePagination«List«ResellerDTO»»:
+    type: object
+    required:
+      - currentPage
+      - data
+      - totalItems
+      - totalPages
+    properties:
+      currentPage:
+        type: integer
+        format: int32
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ResellerDTO'
+      totalItems:
+        type: integer
+        format: int64
+      totalPages:
+        type: integer
+        format: int32
+    title: ResponsePagination«List«ResellerDTO»»
+  Response«AuthDTO»:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/AuthDTO'
+    title: Response«AuthDTO»
+  Response«CashbackDTO»:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/CashbackDTO'
+    title: Response«CashbackDTO»
+  Response«PurchaseDTO»:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/PurchaseDTO'
+    title: Response«PurchaseDTO»
+  Response«ResellerDTO»:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        $ref: '#/definitions/ResellerDTO'
+    title: Response«ResellerDTO»
+  View:
+    type: object
+    properties:
+      contentType:
+        type: string
+    title: View
