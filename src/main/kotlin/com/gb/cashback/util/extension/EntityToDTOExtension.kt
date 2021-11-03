@@ -20,6 +20,9 @@ object EntityToDTOExtension {
         this.purchaseCode,
         this.purchaseValue,
         this.purchaseDate.toString(),
+        this.purchaseStatus!!.value,
+        this.purchaseValueCashback,
+        this.purchasePercentage,
         this.resellerEntity!!.resellerDocument
     )
 }

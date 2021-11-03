@@ -21,6 +21,9 @@ object DTOTOEntityExtension {
         this.purchaseCode,
         this.purchaseValue,
         APPUtil.stringToDate(this.purchaseDate),
+        null,
+        null,
+        null,
         null
     )
 }

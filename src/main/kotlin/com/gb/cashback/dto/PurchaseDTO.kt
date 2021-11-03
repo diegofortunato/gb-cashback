@@ -1,7 +1,10 @@
 package com.gb.cashback.dto
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.math.BigDecimal
+import javax.persistence.Column
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
@@ -21,6 +24,18 @@ data class PurchaseDTO(
         @JsonProperty("date")
         @field:NotNull @field:NotEmpty(message = "Date cannot be empty")
         val purchaseDate: String,
+
+        @JsonProperty("status")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val purchaseStatus: String?,
+
+        @JsonProperty("value_cashback")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var purchaseValueCashback: BigDecimal?,
+
+        @JsonProperty("percentage_cashback")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        var purchasePercentage: Int?,
 
         @JsonProperty("document")
         @field:Size(min = 14, message = "Document should have at least 14 characters. EX: xxx.xxx.xxx-xx")
