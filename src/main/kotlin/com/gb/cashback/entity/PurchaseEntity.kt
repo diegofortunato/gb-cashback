@@ -3,7 +3,16 @@ package com.gb.cashback.entity
 import com.gb.cashback.constant.StatusPurchaseEnum
 import java.math.BigDecimal
 import java.time.LocalDate
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.Table
+import javax.persistence.Id
+import javax.persistence.GeneratedValue
+import javax.persistence.Column
+import javax.persistence.GenerationType
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
+import javax.persistence.ManyToOne
+import javax.persistence.JoinColumn
 
 @Entity
 @Table(name = "purchase_tb")

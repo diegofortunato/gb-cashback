@@ -1,7 +1,12 @@
 package com.gb.cashback.entity
 
 import java.math.BigDecimal
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.Table
+import javax.persistence.Id
+import javax.persistence.GeneratedValue
+import javax.persistence.Column
+import javax.persistence.GenerationType
 
 @Entity
 @Table(name = "cashback_tb")

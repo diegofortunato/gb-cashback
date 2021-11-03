@@ -2,10 +2,8 @@ package com.gb.cashback.util
 
 import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.LoggerFactory
-import java.text.Normalizer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 object APPUtil {
 

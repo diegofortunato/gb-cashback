@@ -1,6 +1,5 @@
 package com.gb.cashback.controller.advice
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.gb.cashback.constant.APIConstant
 import com.gb.cashback.controller.response.ErrorResponse
 import com.gb.cashback.controller.response.Response
@@ -19,7 +18,6 @@ import org.springframework.web.context.request.WebRequest
 import java.time.Instant
 import javax.persistence.EntityExistsException
 import javax.persistence.EntityNotFoundException
-
 
 @ControllerAdvice
 class RestExceptionHandler {
