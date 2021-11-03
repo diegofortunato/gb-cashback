@@ -3,7 +3,7 @@
 </h1>
 
 <h2 align="center">
-   Com o GB Cashback você controla todo o fluxo de cadastro de Revendores, Compras e controle de Cashback sobre essas compras.
+   Com o GB Cashback você controla todo o fluxo de revendores da plataforma, assim como suas compras e controle de Cashback sobre essas compras.
 </h2>
 
 ## [](https://github.com/diegofortunato/gb-cashback#stack-)Stack  💻
