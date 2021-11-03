@@ -4,6 +4,7 @@ import com.gb.cashback.constant.APIConstant
 import com.gb.cashback.constant.StatusPurchaseEnum
 import com.gb.cashback.dto.PurchaseDTO
 import com.gb.cashback.entity.PurchaseEntity
+import com.gb.cashback.entity.ResellerEntity
 import com.gb.cashback.repository.CashbackRepository
 import com.gb.cashback.repository.DocumentExceptionRepository
 import com.gb.cashback.repository.PurchaseRepository
@@ -32,34 +33,12 @@ class PurchaseServiceImpl(
     override fun createPurchase(purchaseEntity: PurchaseEntity, resellerDocument: String): PurchaseDTO {
         log.info("Create Purchase service. purchaseCode={}", purchaseEntity.purchaseCode)
 
-        val purchase = purchaseRepository.findByPurchaseCode(purchaseEntity.purchaseCode)
-        if (purchase.isPresent) throw EntityExistsException(APIConstant.ERROR_400_PURCHASE)
+        findPurchaseCode(purchaseEntity)
 
-        val document = APPUtil.removeSpecialCaracters(resellerDocument)
-        val reseller = resellerRepository.findByResellerDocument(document)
-                .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
+        val (document, reseller) = findReseller(resellerDocument)
 
-        val documents = documentExceptionRepository.findAll()
-        var purchaseStatus = StatusPurchaseEnum.IN_VALIDATION
-
-        documents.forEach { documentException ->
-            if(documentException.document == document) {
-                purchaseStatus = StatusPurchaseEnum.APPROVED
-            }
-        }
-
-        val valuePurchase = purchaseEntity.purchaseValue
-        var percentageCashbackPurchage = 0
-        var valueCashbackPurchage = BigDecimal("0")
-
-        val cashbacks = cashbackRepository.findAll()
-        cashbacks.forEach { cashback ->
-            if (valuePurchase >= cashback.minValueCashback && valuePurchase <= cashback.maxValueCashback){
-                percentageCashbackPurchage = cashback.percentage
-                val value = valuePurchase.toDouble() * cashback.percentage / 100
-                valueCashbackPurchage = BigDecimal(value)
-            }
-        }
+        val purchaseStatus = getStatusPurchase(document)
+        val (percentageCashbackPurchage, valueCashbackPurchage) = getValuesCashback(purchaseEntity)
 
         purchaseEntity.resellerEntity = reseller
         purchaseEntity.purchaseStatus = purchaseStatus
@@ -82,5 +61,45 @@ class PurchaseServiceImpl(
                 .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
 
         return purchaseRepository.findAllByResellerEntity(paging, reseller).map { purchase -> purchase.toDTO() }
+    }
+
+    private fun findReseller(resellerDocument: String): Pair<String, ResellerEntity> {
+        val document = APPUtil.removeSpecialCaracters(resellerDocument)
+        val reseller = resellerRepository.findByResellerDocument(document)
+                .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
+        return Pair(document, reseller)
+    }
+
+    private fun findPurchaseCode(purchaseEntity: PurchaseEntity) {
+        val purchase = purchaseRepository.findByPurchaseCode(purchaseEntity.purchaseCode)
+        if (purchase.isPresent) throw EntityExistsException(APIConstant.ERROR_400_PURCHASE)
+    }
+
+    private fun getStatusPurchase(document: String): StatusPurchaseEnum {
+        val documents = documentExceptionRepository.findAll()
+        var purchaseStatus = StatusPurchaseEnum.IN_VALIDATION
+
+        documents.forEach { documentException ->
+            if (documentException.document == document) {
+                purchaseStatus = StatusPurchaseEnum.APPROVED
+            }
+        }
+        return purchaseStatus
+    }
+
+    private fun getValuesCashback(purchaseEntity: PurchaseEntity): Pair<Int, BigDecimal> {
+        val valuePurchase = purchaseEntity.purchaseValue
+        var percentageCashbackPurchage = 0
+        var valueCashbackPurchage = BigDecimal("0")
+
+        val cashbacks = cashbackRepository.findAll()
+        cashbacks.forEach { cashback ->
+            if (valuePurchase >= cashback.minValueCashback && valuePurchase <= cashback.maxValueCashback) {
+                percentageCashbackPurchage = cashback.percentage
+                val value = valuePurchase.toDouble() * cashback.percentage / 100
+                valueCashbackPurchage = BigDecimal(value)
+            }
+        }
+        return Pair(percentageCashbackPurchage, valueCashbackPurchage)
     }
 }
