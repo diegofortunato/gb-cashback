@@ -28,4 +28,12 @@ object APPUtil {
 
         return BCrypt.hashpw(password, BCrypt.gensalt())
     }
+
+    @JvmStatic
+    fun verifyPasswordIsCorrect(password: String, storedPassword: String): Boolean {
+        log.info("Init verify Password is correct")
+
+        val result = BCrypt.hashpw(password, storedPassword)
+        return result.equals(storedPassword)
+    }
 }

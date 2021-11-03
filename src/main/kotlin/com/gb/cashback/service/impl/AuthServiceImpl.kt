@@ -15,7 +15,10 @@ class AuthServiceImpl(private val resellerRepository: ResellerRepository) : Auth
     override fun login(resellerEmail: String, resellerPassword: String) {
         log.info("Find Login service. resellerEmaail={}", resellerEmail)
 
-        resellerRepository.findByResellerEmailAndResellerPassword(resellerEmail, resellerPassword)
-                .orElseThrow { AuthException("Login error") }
+        val reseller = resellerRepository.findByResellerEmail(resellerEmail).orElseThrow { AuthException("Email not found") }
+
+        val isPasswordCorrect = APPUtil.verifyPasswordIsCorrect(resellerPassword, reseller.resellerPassword)
+
+        if (!isPasswordCorrect) throw AuthException("Password does not match")
     }
 }
