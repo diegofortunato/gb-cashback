@@ -1,8 +1,5 @@
 package com.gb.cashback.service
 
-import com.gb.cashback.dto.CashbackDTO
-import com.gb.cashback.entity.PurchaseEntity
-import com.gb.cashback.repository.PurchaseRepository
 import com.gb.cashback.service.impl.CashbackIntegrationServiceImpl
 import com.gb.cashback.service.impl.CashbackServiceImpl
 import org.junit.jupiter.api.Assertions
@@ -28,7 +25,7 @@ class CashbackServiceImplTest {
         BDDMockito.given<Long>(cashbackIntegrationServiceImpl?.getCashbackIntegration())
                 .willReturn(200)
 
-        val response = cashbackService!!.findCashback()
+        val response = cashbackService!!.findCashback(resellerDocument)
         Assertions.assertNotNull(response)
         Assertions.assertEquals(response.credit, 200)
     }

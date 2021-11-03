@@ -7,6 +7,7 @@ import com.gb.cashback.service.CashbackService
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -17,10 +18,10 @@ class CashbackController(private val cashbackService: CashbackService) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @GetMapping(APIConstant.SERVICE_GET_CASHBACK)
-    fun findCashback(): ResponseEntity<Response<CashbackDTO>> {
+    fun findCashback(@PathVariable("cpf") resellerDocument: String): ResponseEntity<Response<CashbackDTO>> {
         log.info("GET ${APIConstant.SERVICE_GET_CASHBACK}")
 
-        val cashback = cashbackService.findCashback()
+        val cashback = cashbackService.findCashback(resellerDocument)
         return ResponseEntity.ok(Response(data = cashback))
     }
 }

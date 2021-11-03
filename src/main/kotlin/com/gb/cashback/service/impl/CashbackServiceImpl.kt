@@ -12,10 +12,10 @@ class CashbackServiceImpl(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun findCashback(): CashbackDTO {
+    override fun findCashback(resellerDocument: String): CashbackDTO {
         log.info("Find Cashback")
 
-        val cashback = cashbackIntegrationService.getCashbackIntegration()
+        val cashback = cashbackIntegrationService.getCashbackIntegration(resellerDocument)
         return CashbackDTO(cashback)
     }
 }

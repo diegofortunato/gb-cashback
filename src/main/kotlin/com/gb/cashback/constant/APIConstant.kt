@@ -17,10 +17,10 @@ class APIConstant {
         const val SERVICE_GET_ALL_PURCHASE = "/purchase"
         const val SERVICE_GET_PURCHASE = "/purchase/{id}"
 
-        const val SERVICE_GET_CASHBACK = "/cashback"
+        const val SERVICE_GET_CASHBACK = "/cashback/{cpf}"
 
         const val BASE_INTEGRATION = "https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/"
-        const val SERVICE_GET_CASHBACK_INTEGRATION = "cashback?cpf=12312312321"
+        const val SERVICE_GET_CASHBACK_INTEGRATION = "cashback"
 
         const val ERROR_400 = "Entity already exists in the system."
         const val ERROR_400_RESELER = "Reseller already exists in the system, " +

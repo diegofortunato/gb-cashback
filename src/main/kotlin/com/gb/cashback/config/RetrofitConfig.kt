@@ -1,16 +1,25 @@
 package com.gb.cashback.config
 
 import com.gb.cashback.constant.APIConstant
+import com.gb.cashback.security.OAuthInterceptor
 import com.gb.cashback.service.CashbackIntegrationService
 import okhttp3.OkHttpClient
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.PropertySource
+import org.springframework.stereotype.Component
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitConfig {
+class RetrofitConfig(
+        private var appProperties: AppProperties
+) {
 
     private val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(OAuthInterceptor("Bearer", appProperties.accessToken))
             .writeTimeout(20, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
