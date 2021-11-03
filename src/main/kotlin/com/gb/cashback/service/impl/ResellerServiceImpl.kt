@@ -1,5 +1,6 @@
 package com.gb.cashback.service.impl
 
+import com.gb.cashback.constant.APIConstant
 import com.gb.cashback.dto.ResellerDTO
 import com.gb.cashback.entity.ResellerEntity
 import com.gb.cashback.repository.ResellerRepository
@@ -28,7 +29,7 @@ class ResellerServiceImpl(
         resellerEntity.resellerDocument = APPUtil.removeSpecialCaracters(resellerEntity.resellerDocument)
 
         val reseller = isExistReseller(resellerEntity.resellerEmail, resellerEntity.resellerDocument)
-        if (reseller.isPresent) throw EntityExistsException("Reseller exists")
+        if (reseller.isPresent) throw EntityExistsException(APIConstant.ERROR_400_RESELER)
 
         resellerEntity.resellerPassword = APPUtil.encryptPassword(resellerEntity.resellerPassword)!!
 
@@ -40,7 +41,7 @@ class ResellerServiceImpl(
         log.info("Find Reseller service. resellerID={}", resellerID)
 
         val resellerDB = resellerRepository.findById(resellerID)
-                .orElseThrow { EntityNotFoundException("Reseller not Exists") }
+                .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
 
         return resellerDB.toDTO()
     }
@@ -55,7 +56,7 @@ class ResellerServiceImpl(
         log.info("Update Reseller service. resellerName={}", resellerEntity.resellerFullName)
 
         val resellerDB = resellerRepository.findById(resellerID)
-                .orElseThrow { EntityNotFoundException("Reseller not Exists") }
+                .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
 
         val document = APPUtil.removeSpecialCaracters(resellerEntity.resellerDocument)
 
@@ -66,7 +67,7 @@ class ResellerServiceImpl(
                 resellerEmail.isPresent && resellerEmail.get().resellerId == resellerDB.resellerId) {
             updateFieldsReseller(resellerDB, resellerEntity)
         } else {
-            throw EntityExistsException("Email or document already exists in the system")
+            throw EntityExistsException(APIConstant.ERROR_400_RESELER)
         }
 
         return resellerRepository.save(resellerDB).toDTO()
@@ -76,7 +77,7 @@ class ResellerServiceImpl(
         log.info("Delete Reseller service. resellerID={}", resellerID)
 
         val resellerDB = resellerRepository.findById(resellerID)
-                .orElseThrow { EntityNotFoundException("Reseller not Exists") }
+                .orElseThrow { EntityNotFoundException(APIConstant.ERROR_404_RESELER) }
 
         resellerRepository.delete(resellerDB)
     }

@@ -3,24 +3,27 @@ package com.gb.cashback.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 data class PurchaseDTO(
         @JsonProperty("id")
         val purchaseId: Long,
 
         @JsonProperty("code")
-        @NotEmpty(message = "Code cannot be null")
+        @field:NotNull @field:NotEmpty(message = "Code cannot be empty")
         val purchaseCode: String,
 
         @JsonProperty("value")
-        @NotEmpty(message = "Value cannot be null")
-        val purchaseValue: Double,
+        @field:NotNull(message = "Value cannot be null")
+        val purchaseValue: BigDecimal,
 
         @JsonProperty("date")
-        @NotEmpty(message = "Date cannot be null")
+        @field:NotNull @field:NotEmpty(message = "Date cannot be empty")
         val purchaseDate: String,
 
         @JsonProperty("document")
-        @NotEmpty(message = "Document cannot be null")
+        @field:Size(min = 14, message = "Document should have at least 14 characters. EX: xxx.xxx.xxx-xx")
+        @field:NotNull @field:NotEmpty(message = "Document cannot be empty")
         val resellerDocument: String,
 )

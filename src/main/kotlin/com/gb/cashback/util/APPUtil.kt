@@ -3,6 +3,9 @@ package com.gb.cashback.util
 import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.LoggerFactory
 import java.text.Normalizer
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 object APPUtil {
 
@@ -35,5 +38,12 @@ object APPUtil {
 
         val result = BCrypt.hashpw(password, storedPassword)
         return result.equals(storedPassword)
+    }
+
+    @JvmStatic
+    fun stringToDate(date: String): LocalDate {
+        log.info("Init string to date method")
+
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 }

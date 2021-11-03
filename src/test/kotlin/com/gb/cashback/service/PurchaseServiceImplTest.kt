@@ -27,7 +27,7 @@ class PurchaseServiceImplTest {
         BDDMockito.given<PurchaseEntity>(purchaseRepository?.save(anyObject()))
                 .willReturn(getPurchase())
 
-        val response = purchaseService!!.createPurchase(getPurchase())
+        val response = purchaseService!!.createPurchase(getPurchase(), purchaseRequest.request.resellerDocument)
         Assertions.assertNotNull(response)
         Assertions.assertEquals(response.purchaseId, 1L)
     }
@@ -37,7 +37,7 @@ class PurchaseServiceImplTest {
         BDDMockito.given<List<PurchaseEntity>>(purchaseRepository?.findAll())
                 .willReturn(getPurchaseList())
 
-        val response = purchaseService!!.findPurchases()
+        val response = purchaseService!!.findPurchases(paging)
         Assertions.assertNotNull(response)
         Assertions.assertEquals(response[0].purchaseId, 1L)
     }

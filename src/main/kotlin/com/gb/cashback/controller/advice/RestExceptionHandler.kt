@@ -38,7 +38,7 @@ class RestExceptionHandler {
                 Instant.now().toString(),
                 HttpStatus.BAD_REQUEST.value(),
                 APIConstant.ERROR_400,
-                APIConstant.DETAILS_ERROR_400
+                ex.message.toString()
         )
         val response = Response(data = errorResponse)
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
@@ -68,7 +68,7 @@ class RestExceptionHandler {
                 Instant.now().toString(),
                 HttpStatus.NOT_FOUND.value(),
                 APIConstant.ERROR_404,
-                APIConstant.DETAILS_ERROR_404
+                ex.message.toString()
         )
         val response = Response(data = errorResponse)
         return ResponseEntity(response, HttpStatus.NOT_FOUND)
