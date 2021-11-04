@@ -20,7 +20,7 @@ Certifique que você tenha o Docker instalado em sua maquina e rode os seguintes
 -   Primeiro passo clone o projeto:  `https://github.com/diegofortunato/gb-cashback`
 -   Entre na pasta raiz no local clonado.
 -   Build o projeto com:  `gradle clean build`
--   Após o build execute o seguinte comando:  `docker build ./ -t springbootapp`
+-   Após o build execute o seguinte comando:  `docker build -t app.jar .`
 -   Após esse comando. execute:  `docker-compose up`
 
 Pronto, o projeto estara disponivel em:  `localhost:8080`
