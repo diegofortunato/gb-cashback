@@ -22,10 +22,10 @@ class CashbackServiceImplTest {
 
     @Test
     fun findCashbackTest() {
-        BDDMockito.given<Long>(cashbackIntegrationServiceImpl?.getCashbackIntegration())
+        BDDMockito.given<Long>(cashbackIntegrationServiceImpl?.getCashbackIntegration("45474132824"))
                 .willReturn(200)
 
-        val response = cashbackService!!.findCashback(resellerDocument)
+        val response = cashbackService!!.findCashback("45474132824")
         Assertions.assertNotNull(response)
         Assertions.assertEquals(response.credit, 200)
     }

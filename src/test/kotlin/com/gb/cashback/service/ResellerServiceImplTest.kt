@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import java.util.*
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import java.util.Optional
 import javax.persistence.EntityExistsException
 import javax.persistence.EntityNotFoundException
 
@@ -71,11 +74,24 @@ class ResellerServiceImplTest {
     }
 
     @Test
+    fun findAllResellerWithSuccessTest() {
+        given<Page<ResellerEntity>>(resellerRepository?.findAll(PageRequest.of(0, 10)))
+                .willReturn(PageImpl(getResellerList()))
+
+        val response = resellerService!!.findAllReseller(PageRequest.of(0, 10))
+        Assertions.assertNotNull(response)
+        Assertions.assertEquals(response.size, 1)
+    }
+
+    @Test
     fun updateResellerWithSuccessTest() {
         given<Optional<ResellerEntity>>(resellerRepository?.findById(1L))
                 .willReturn(Optional.of(getReseller()))
 
-        given<Optional<ResellerEntity>>(resellerRepository?.findByResellerEmailOrResellerDocument(anyString(), anyString()))
+        given<Optional<ResellerEntity>>(resellerRepository?.findByResellerDocument(anyString()))
+                .willReturn(Optional.of(getReseller()))
+
+        given<Optional<ResellerEntity>>(resellerRepository?.findByResellerEmail(anyString()))
                 .willReturn(Optional.of(getReseller()))
 
         given<ResellerEntity>(resellerRepository?.save(anyObject()))
@@ -93,6 +109,22 @@ class ResellerServiceImplTest {
 
         Assertions.assertThrows(
                 EntityNotFoundException::class.java
+        ) { resellerService!!.updateReseller(1L, getResellerUpdate()) }
+    }
+
+    @Test
+    fun updateResellerExistsTest() {
+        given<Optional<ResellerEntity>>(resellerRepository?.findById(1L))
+                .willReturn(Optional.of(getReseller()))
+
+        given<Optional<ResellerEntity>>(resellerRepository?.findByResellerDocument(anyString()))
+                .willReturn(Optional.of(getReseller()))
+
+        given<Optional<ResellerEntity>>(resellerRepository?.findByResellerEmail(anyString()))
+                .willReturn(Optional.of(getResellerTwo()))
+
+        Assertions.assertThrows(
+                EntityExistsException::class.java
         ) { resellerService!!.updateReseller(1L, getResellerUpdate()) }
     }
 
@@ -126,6 +158,26 @@ class ResellerServiceImplTest {
             "diego@email.com",
             "abcd1234",
         )
+    }
+
+    private fun getResellerTwo(): ResellerEntity {
+        return ResellerEntity(
+                2L,
+                "Diego Candido",
+                "45478963252",
+                "diego@email.com",
+                "abcd1234",
+        )
+    }
+
+    private fun getResellerList(): List<ResellerEntity> {
+        return listOf(ResellerEntity(
+                1L,
+                "Diego Fortunato Candido",
+                "45478963258",
+                "diego@email.com",
+                "abcd1234",
+        ))
     }
 
     private fun getResellerUpdate(): ResellerEntity {

@@ -4,6 +4,7 @@ import com.gb.cashback.entity.ResellerEntity
 import com.gb.cashback.exception.AuthException
 import com.gb.cashback.repository.ResellerRepository
 import com.gb.cashback.service.impl.AuthServiceImpl
+import com.gb.cashback.util.APPUtil
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
@@ -27,16 +28,16 @@ class AuthServiceImplTest {
     @Test
     fun findResellerLoginWithSuccessTest() {
         BDDMockito.given<Optional<ResellerEntity>>(
-                resellerRepository?.findByResellerEmailAndResellerPassword("diego.fcandido1996@gmail.com", "abcd1234"))
+                resellerRepository?.findByResellerEmail("diego.fcandido1996@gmail.com"))
                 .willReturn(Optional.of(getReseller()))
 
         authService!!.login("diego.fcandido1996@gmail.com", "abcd1234")
-        Mockito.verify(resellerRepository, Mockito.times(1))!!.findByResellerEmailAndResellerPassword("diego.fcandido1996@gmail.com", "abcd1234")
+        Mockito.verify(resellerRepository, Mockito.times(1))!!.findByResellerEmail("diego.fcandido1996@gmail.com")
     }
 
     @Test
     fun findResellerLoginWithFailedTest() {
-        BDDMockito.given<Optional<ResellerEntity>>(resellerRepository?.findByResellerEmailOrResellerDocument("diego.fcandido1996@gmail.com", "abcd"))
+        BDDMockito.given<Optional<ResellerEntity>>(resellerRepository?.findByResellerEmail("diego.fcandido1996@gmail.com"))
                 .willReturn(Optional.empty())
 
         Assertions.assertThrows(
@@ -50,7 +51,7 @@ class AuthServiceImplTest {
                 "Diego Fortunato",
                 "45478963258",
                 "diego@email.com",
-                "abcd1234",
+                APPUtil.encryptPassword("abcd1234")!!,
         )
     }
 }

@@ -42,6 +42,6 @@ object APPUtil {
     fun stringToDate(date: String): LocalDate {
         log.info("Init string to date method")
 
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
 }
