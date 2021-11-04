@@ -183,7 +183,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"request\": {\n        \"code\": \"4\",\n        \"value\": 5000,\n        \"date\": \"01/11/2021\",\n        \"document\": \"454.741.328-24\"\n    }\n}",
+							"raw": "{\n    \"request\": {\n        \"code\": \"4\",\n        \"value\": 5000,\n        \"date\": \"2021-11-04\",\n        \"document\": \"454.741.328-24\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
